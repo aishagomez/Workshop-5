@@ -4,13 +4,13 @@ import numpy as np
 comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
 size = comm.Get_size()
-start_time = MPI.Wtime() # Inicio del cronómetro
 
 # Tamaño total del array
 N = 50
 
 if rank == 0:
     data = np.arange(1, N + 1, dtype=int)
+    start_time = MPI.Wtime() # Inicio del cronómetro
 else:
     data = None
 
@@ -37,10 +37,11 @@ all_squares = comm.gather(squares, root=0)
 
 # Tiempo final
 comm.Barrier()
-end_time = MPI.Wtime()
-elapsed_time = end_time - start_time
+
 
 if rank == 0:
+    end_time = MPI.Wtime()
+    elapsed_time = end_time - start_time
     print("Array original:", data)
     print("Suma global de cuadrados:", global_sum)
     print("Todos los cuadrados por proceso:", all_squares)
